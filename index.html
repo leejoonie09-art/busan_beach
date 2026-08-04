@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BUSAN BEACH</title>
+  <style>
+    body{margin:0;font-family:Arial,sans-serif;background:#f5faf9;color:#174e5a}.hero{background:#075c78;color:#fff;padding:36px 20px}.brand{letter-spacing:2px;font-weight:900}.wrap{max-width:720px;margin:auto;padding:18px}.mode-tabs{display:grid;grid-template-columns:1fr 1fr;gap:7px;background:#e2efef;padding:6px;border-radius:17px;margin-bottom:24px}.mode-tabs button{border:0;border-radius:12px;padding:13px 8px;background:transparent;color:#648387;font-weight:900;cursor:pointer}.mode-tabs button.active{background:#fff;color:#087f8b;box-shadow:0 3px 10px #527c7c22}.chips button{margin:4px;padding:11px 13px;border:0;border-radius:18px;color:#087f8b;background:#e1f7f3;font-weight:bold;cursor:pointer}.chips button.active{color:#fff;background:#087f8b;box-shadow:0 4px 12px #087f8b55}.recommend,.card,.beach-detail{border-radius:18px;margin:13px 0;box-shadow:0 2px 10px #dceaea;overflow:hidden}.recommend{background:#dff7f3;padding:17px}.card{background:#fff;display:flex;align-items:center;gap:15px;padding:11px}.beach-photo{width:128px;height:92px;flex:0 0 128px;object-fit:cover;border-radius:13px;background:#dcebea}.card-content{min-width:0;flex:1}.meta{margin-top:7px;font-size:13px;line-height:1.55;color:#6f9296}.rank{display:inline-block;margin-right:6px;color:#0b8e92;font-weight:900}.photo-credit{font-size:10px;color:#829b9e;margin-top:6px}.beach-picker{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.beach-picker button{border:1px solid #d7e8e7;border-radius:13px;padding:12px 8px;background:#fff;color:#446f75;font-weight:800;cursor:pointer}.beach-picker button.active{border-color:#0b9191;background:#0b9191;color:#fff}.beach-detail{background:#fff;margin-top:17px}.detail-hero{height:210px;width:100%;object-fit:cover}.detail-body{padding:18px}.info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:16px 0}.info-item{background:#f0f7f6;border-radius:12px;padding:11px 8px}.info-item small{display:block;color:#789496;margin-bottom:5px}.info-item b{font-size:14px}.activity-tags{display:flex;flex-wrap:wrap;gap:7px}.activity-tag{background:#e2f7ef;color:#187965;padding:7px 10px;border-radius:10px;font-size:12px;font-weight:800}.hidden{display:none}@media(max-width:480px){.beach-photo{width:108px;height:86px;flex-basis:108px}.card{gap:11px}.meta{font-size:12px}.info-grid{grid-template-columns:repeat(2,1fr)}}
+  </style>
+</head>
+<body>
+  <section class="hero"><div class="brand">BUSAN BEACH</div><h1>오늘, 바다는<br>어떤 기분일까?</h1><p>부산 7개 해수욕장 정보와 활동별 추천</p></section>
+  <main class="wrap"><nav class="mode-tabs"><button id="activityTab" class="active">활동으로 찾기</button><button id="beachTab">바다로 보기</button></nav><section id="activityMode"><h3>무엇을 하고 싶나요?</h3><div class="chips" id="chips"></div><section class="recommend"><b id="recommendLabel"></b><h2 id="recommendName"></h2><p id="recommendInfo"></p></section><h2>추천 해수욕장</h2><div id="list"></div></section><section id="beachMode" class="hidden"><h3>궁금한 바다를 선택하세요</h3><p class="meta">현재 바다 정보와 즐길 수 있는 활동을 한눈에 확인해요.</p><div class="beach-picker" id="beachPicker"></div><div id="beachDetail"></div></section></main>
+  <script>
+    const activities=['물놀이','서핑','스노클링','갯벌체험','비치발리볼','모래놀이','휴식'];
+    const beaches=[
+      {name:'해운대해수욕장',wave:.5,temp:25.8,period:5.2,wind:3.1,windDir:'남동',tide:'만조 14:22',water:'좋음',jelly:'관찰 없음',sand:31,scores:[95,58,75,45,94,90,88],photo:'https://commons.wikimedia.org/wiki/Special:FilePath/Busan%20City%20Haeundae%20Beach%20KOGL%20(01).jpg?width=700'},
+      {name:'광안리해수욕장',wave:.4,temp:26.1,period:4.8,wind:2.5,windDir:'동',tide:'만조 14:18',water:'좋음',jelly:'관찰 없음',sand:32,scores:[93,51,67,42,96,94,92],photo:'https://commons.wikimedia.org/wiki/Special:FilePath/Gwangalli%20Beach.jpg?width=700'},
+      {name:'송정해수욕장',wave:1.1,temp:25.3,period:7.4,wind:5.8,windDir:'동남동',tide:'만조 14:31',water:'매우 좋음',jelly:'주의',sand:30,scores:[68,98,78,39,76,72,73],photo:'https://commons.wikimedia.org/wiki/Special:FilePath/Songjeong%20Beach.jpg?width=700'},
+      {name:'다대포해수욕장',wave:.7,temp:25.5,period:6.1,wind:4.0,windDir:'남',tide:'간조 18:05',water:'좋음',jelly:'관찰 없음',sand:29,scores:[84,72,63,97,86,88,91],photo:'https://commons.wikimedia.org/wiki/Special:FilePath/Dadaepo%20Beach,%20Busan,%20Korea.jpg?width=700'},
+      {name:'일광해수욕장',wave:.6,temp:25.1,period:5.5,wind:3.6,windDir:'남동',tide:'간조 18:12',water:'매우 좋음',jelly:'관찰 없음',sand:30,scores:[90,61,91,82,78,96,89],photo:'https://commons.wikimedia.org/wiki/Special:FilePath/일광해수욕장.jpg?width=700'},
+      {name:'임랑해수욕장',wave:.8,temp:24.9,period:6.6,wind:4.4,windDir:'동남동',tide:'간조 18:17',water:'매우 좋음',jelly:'관찰 없음',sand:28,scores:[85,77,94,76,70,88,95],photo:'https://commons.wikimedia.org/wiki/Special:FilePath/Busan%20beach.jpg?width=700'},
+      {name:'송도해수욕장',wave:.4,temp:25.7,period:4.9,wind:2.8,windDir:'남동',tide:'만조 14:25',water:'좋음',jelly:'관찰 없음',sand:30,scores:[92,48,86,55,84,91,93],photo:'https://commons.wikimedia.org/wiki/Special:FilePath/Seongdo%20Beach.jpg?width=700'}
+    ];
+    let selected=0;
+    let selectedBeach=0;
+    const liveNotice=document.createElement('div');
+    liveNotice.style.cssText='background:#e2f7f3;border-radius:13px;padding:11px 13px;margin:16px 0;color:#16776e;font-size:12px;font-weight:700';
+    liveNotice.textContent='기상청 해양관측 자료를 불러오는 중입니다.';
+    document.querySelector('.wrap').prepend(liveNotice);
+    const refreshButton=document.createElement('button');
+    refreshButton.textContent='↻ 지금 새로고침';
+    refreshButton.style.cssText='display:block;margin:0 0 16px auto;border:0;background:#087f8b;color:#fff;border-radius:10px;padding:9px 12px;font-weight:800;cursor:pointer';
+    document.querySelector('.wrap').insertBefore(refreshButton,document.querySelector('.mode-tabs'));
+    const stationHints=[['부산','기장','울산'],['부산','기장'],['기장','울산','부산'],['부산','가덕','거제'],['기장','울산','부산'],['기장','울산'],['부산','가덕','거제']];
+    function kmaValue(row,...keys){for(const key of keys){if(row[key]&&row[key]!=='-')return row[key];}return null;}
+    async function loadLive(index){
+      try{
+        const data=await fetch('./data/kma-marine.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error('KMA data unavailable');return r.json();});
+        const hints=stationHints[index];
+        const row=data.rows.find(item=>hints.some(hint=>String(kmaValue(item,'STN_KO','STN')||'').includes(hint)))||data.rows[0];
+        const b=beaches[index];
+        const wave=Number(kmaValue(row,'WH','WH_SIG')),period=Number(kmaValue(row,'WP')),temp=Number(kmaValue(row,'TW')),wind=Number(kmaValue(row,'WS','WS1')),direction=kmaValue(row,'WD','WD1');
+        if(Number.isFinite(wave))b.wave=wave;if(Number.isFinite(period))b.period=period;if(Number.isFinite(temp))b.temp=temp;if(Number.isFinite(wind))b.wind=wind;if(direction)b.windDir=`${direction}°`;
+        const time=kmaValue(row,'TM')||new Date(data.fetchedAt).toLocaleString('ko-KR');
+        const station=kmaValue(row,'STN_KO','STN')||'해양관측소';
+        liveNotice.textContent=`기상청 ${station} 관측값 · ${time} 기준 · 약 15분마다 자동 갱신`;
+        render();renderBeach();
+      }catch{liveNotice.textContent='기상청 최신 관측자료가 아직 준비되지 않아 기본 정보를 표시합니다.';}
+    }
+    function render(){
+      document.querySelector('#chips').innerHTML=activities.map((a,i)=>`<button class="${i===selected?'active':''}" data-index="${i}">${a}</button>`).join('');
+      const ranked=[...beaches].sort((a,b)=>b.scores[selected]-a.scores[selected]);
+      const best=ranked[0];
+      document.querySelector('#recommendLabel').textContent=`${activities[selected]} 추천 1위`;
+      document.querySelector('#recommendName').textContent=best.name;
+      document.querySelector('#recommendInfo').textContent=`파고 ${best.wave}m · 수온 ${best.temp}°C · 수질 좋음`;
+      document.querySelector('#list').innerHTML=ranked.map((b,i)=>`<article class="card"><img class="beach-photo" src="${b.photo}" alt="${b.name} 전경" loading="lazy"><div class="card-content"><div><span class="rank">${i+1}</span><b>${b.name}</b></div><div class="meta">파고 ${b.wave}m · 수온 ${b.temp}°C<br>수질 좋음 · 해파리 관찰 없음</div><div class="photo-credit">사진: Wikimedia Commons</div></div></article>`).join('');
+      document.querySelectorAll('#chips button').forEach(button=>button.addEventListener('click',()=>{selected=Number(button.dataset.index);render();}));
+    }
+    function renderBeach(){
+      document.querySelector('#beachPicker').innerHTML=beaches.map((b,i)=>`<button class="${i===selectedBeach?'active':''}" data-beach="${i}">${b.name.replace('해수욕장','')}</button>`).join('');
+      const b=beaches[selectedBeach];
+      const available=activities.filter((_,i)=>b.scores[i]>=80);
+      document.querySelector('#beachDetail').innerHTML=`<article class="beach-detail"><img class="detail-hero" src="${b.photo}" alt="${b.name} 전경"><div class="detail-body"><h2>${b.name}</h2><div class="info-grid"><div class="info-item"><small>파고</small><b>${b.wave}m</b></div><div class="info-item"><small>파주기</small><b>${b.period}초</b></div><div class="info-item"><small>수온</small><b>${b.temp}°C</b></div><div class="info-item"><small>풍속</small><b>${b.wind}m/s</b></div><div class="info-item"><small>풍향</small><b>${b.windDir}</b></div><div class="info-item"><small>물때</small><b>${b.tide}</b></div><div class="info-item"><small>수질</small><b>${b.water}</b></div><div class="info-item"><small>해파리</small><b>${b.jelly}</b></div><div class="info-item"><small>모래 온도</small><b>${b.sand}°C</b></div></div><h3>이 바다에서 즐기기 좋은 활동</h3><div class="activity-tags">${available.map(a=>`<span class="activity-tag">${a}</span>`).join('')}</div><div class="photo-credit">사진: Wikimedia Commons</div></div></article>`;
+      document.querySelectorAll('[data-beach]').forEach(button=>button.addEventListener('click',()=>{selectedBeach=Number(button.dataset.beach);renderBeach();loadLive(selectedBeach);}));
+    }
+    document.querySelector('#activityTab').addEventListener('click',()=>{document.querySelector('#activityMode').classList.remove('hidden');document.querySelector('#beachMode').classList.add('hidden');document.querySelector('#activityTab').classList.add('active');document.querySelector('#beachTab').classList.remove('active');});
+    document.querySelector('#beachTab').addEventListener('click',()=>{document.querySelector('#activityMode').classList.add('hidden');document.querySelector('#beachMode').classList.remove('hidden');document.querySelector('#activityTab').classList.remove('active');document.querySelector('#beachTab').classList.add('active');renderBeach();});
+    refreshButton.addEventListener('click',()=>loadLive(selectedBeach));
+    render();
+    renderBeach();
+    loadLive(selectedBeach);
+    setInterval(()=>loadLive(selectedBeach),10*60*1000);
+  </script>
+</body>
+</html>
