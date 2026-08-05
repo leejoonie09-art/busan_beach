@@ -58,9 +58,10 @@
     let currentKakaoPlace=null;
     let fullKakaoMap=null;
     let fullKakaoMarker=null;
-    function mapSdkReady(callback){
+    function mapSdkReady(callback,attempt=0){
       if(window.kakao&&window.kakao.maps){window.kakao.maps.load(callback);}
-      else{setTimeout(()=>mapSdkReady(callback),180);}
+      else if(attempt<25){setTimeout(()=>mapSdkReady(callback,attempt+1),180);}
+      else{const mini=document.querySelector('#miniMap');if(mini)mini.innerHTML='<div style=\"padding:34px 8px;color:#17636b;font-weight:800;font-size:12px\">카카오 지도 연결을 확인 중이에요</div>';}
     }
     function beachPlaceSearch(beach,callback){
       mapSdkReady(()=>{
