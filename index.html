@@ -206,7 +206,14 @@
     Object.values(regionalBeaches).flat().forEach(b=>{if(regionalFallbackPhotos[b.name])b.photo=regionalFallbackPhotos[b.name];});
 
   Object.values(regionalBeaches).flat().forEach(b=>{if(b.name==='하나개해수욕장')b.photo='https://upload.wikimedia.org/wikipedia/commons/5/5e/Cabana_at_Hanagae_Beach%2C_Muuido.jpg';if(b.name==='꽃지해수욕장')b.photo='https://upload.wikimedia.org/wikipedia/commons/b/b9/Kkotji_Beach_in_Buan.jpg';});const userPhotos={'을왕리해수욕장':'1','하나개해수욕장':'2','대천해수욕장':'3','꽃지해수욕장':'4','만리포해수욕장':'5','변산해수욕장':'6','선유도해수욕장':'7','명사십리해수욕장':'8','율포해수욕장':'9','영일대해수욕장':'10'};Object.values(regionalBeaches).flat().forEach(b=>{if(userPhotos[b.name])b.photo='https://raw.githubusercontent.com/leejoonie09-art/busan_beach/main/'+userPhotos[b.name];});</script>
-</body>
+<style>
+#bgCycle{position:fixed;top:12px;right:12px;z-index:1000;border:0;border-radius:999px;padding:10px 13px;background:#ffffffee;color:#087f8b;font:800 14px "Jua",Arial,sans-serif;box-shadow:0 3px 12px #075e6855;cursor:pointer}
+#bgCycle:active{transform:scale(.96)}
+</style>
+<button id="bgCycle" type="button" aria-label="배경색 바꾸기">🎨 배경색</button>
+<script>
+(()=>{const colors=['linear-gradient(180deg,#bff3ee 0%,#77d9d2 42%,#279ea2 100%)','linear-gradient(180deg,#d8efff 0%,#90c9f4 42%,#4f91ca 100%)','linear-gradient(180deg,#f5e6ff 0%,#d6b8ec 42%,#9e7fbd 100%)','linear-gradient(180deg,#fff0dc 0%,#ffd28c 42%,#e89a6d 100%)','linear-gradient(180deg,#e3f6d5 0%,#a8d9a3 42%,#5fae91 100%)'];let index=0;const button=document.getElementById('bgCycle');button.addEventListener('click',()=>{index=(index+1)%colors.length;document.body.style.setProperty('background',colors[index],'important');document.body.style.backgroundAttachment='fixed';});})();
+</script></body>
 </html>
  
  
