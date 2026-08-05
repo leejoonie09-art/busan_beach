@@ -123,6 +123,25 @@
         document.querySelector('#routeStatus').textContent='내 위치를 표시했어요. 카카오맵 길찾기에서 실제 경로와 예상 시간을 확인하세요.';
       },()=>{document.querySelector('#routeStatus').textContent='위치 권한이 필요해요. 브라우저에서 위치 권한을 허용한 뒤 다시 눌러 주세요.';},{enableHighAccuracy:true,timeout:10000});
     });
+    let kakaoDetailToken=0;
+    function renderDetailKakaoMap(beach){
+      const token=++kakaoDetailToken;
+      const detail=document.querySelector('#detailMap');
+      if(!detail) return;
+      detail.innerHTML='<div style="padding:72px 8px;color:#17636b;font-weight:800;font-size:12px">지도 불러오는 중…</div>';
+      beachPlaceSearch(beach,place=>{
+        if(token!==kakaoDetailToken) return;
+        mapSdkReady(()=>{
+          if(token!==kakaoDetailToken) return;
+          detail.innerHTML='';
+          const position=new kakao.maps.LatLng(place.lat,place.lng);
+          const detailMap=new kakao.maps.Map(detail,{center:position,level:4,draggable:false,scrollwheel:false,disableDoubleClick:true});
+          new kakao.maps.Marker({position,title:place.name,map:detailMap});
+          const detailButton=document.querySelector('#detailMapButton');
+          if(detailButton) detailButton.onclick=()=>openMapModal(place);
+        });
+      });
+    }
     function render(){
       document.querySelector('#chips').innerHTML=activities.map((a,i)=>`<button class="${i===selected?'active':''}" data-index="${i}">${a}</button>`).join('');
       const ranked=[...beaches].sort((a,b)=>b.scores[selected]-a.scores[selected]);
@@ -144,7 +163,8 @@
       document.querySelector('#beachPicker').innerHTML=beaches.map((b,i)=>`<button class="${i===selectedBeach?'active':''}" data-beach="${i}">${b.name.replace('해수욕장','')}</button>`).join('');
       const b=beaches[selectedBeach];
       const available=activities.filter((_,i)=>b.scores[i]>=80);
-      document.querySelector('#beachDetail').innerHTML=`<article class="beach-detail"><img class="detail-hero" src="${b.photo}" alt="${b.name} 전경"><div class="detail-body"><h2>${b.name}</h2><div class="info-grid"><div class="info-item"><small>파고</small><b>${b.wave}m</b></div><div class="info-item"><small>파주기</small><b>${b.period}초</b></div><div class="info-item"><small>수온</small><b>${b.temp}°C</b></div><div class="info-item"><small>풍속</small><b>${b.wind}m/s</b></div><div class="info-item"><small>풍향</small><b>${b.windDir}</b></div><div class="info-item"><small>물때</small><b>${b.tide}</b></div><div class="info-item"><small>수질</small><b>${b.water}</b></div><div class="info-item"><small>해파리</small><b>${b.jelly}</b></div><div class="info-item"><small>모래 온도</small><b>${b.sand}°C</b></div></div><h3>이 바다에서 즐기기 좋은 활동</h3><div class="activity-tags">${available.map(a=>`<span class="activity-tag">${a}</span>`).join('')}</div><div class="photo-credit">사진: Wikimedia Commons</div></div></article>`;
+      document.querySelector('#beachDetail').innerHTML=`<article class="beach-detail"><img class="detail-hero" src="${b.photo}" alt="${b.name} 전경"><div class="detail-body"><h2>${b.name}</h2><div class="info-grid"><div class="info-item"><small>파고</small><b>${b.wave}m</b></div><div class="info-item"><small>파주기</small><b>${b.period}초</b></div><div class="info-item"><small>수온</small><b>${b.temp}°C</b></div><div class="info-item"><small>풍속</small><b>${b.wind}m/s</b></div><div class="info-item"><small>풍향</small><b>${b.windDir}</b></div><div class="info-item"><small>물때</small><b>${b.tide}</b></div><div class="info-item"><small>수질</small><b>${b.water}</b></div><div class="info-item"><small>해파리</small><b>${b.jelly}</b></div><div class="info-item"><small>모래 온도</small><b>${b.sand}°C</b></div></div><h3>이 바다에서 즐기기 좋은 활동</h3><div class="activity-tags">${available.map(a=>`<span class="activity-tag">${a}</span>`).join('')}</div><button id="detailMapButton" class="detail-map-preview" type="button" aria-label="선택 해수욕장 지도 크게 보기"><div id="detailMap"></div><span>지도를 크게 보기</span></button><div class="photo-credit">사진: Wikimedia Commons</div></div></article>`;
+      renderDetailKakaoMap(b);
       document.querySelectorAll('[data-beach]').forEach(button=>button.addEventListener('click',()=>{selectedBeach=Number(button.dataset.beach);renderBeach();loadLive(selectedBeach);}));
     }
     document.querySelector('#activityTab').addEventListener('click',()=>{document.querySelector('#activityMode').classList.remove('hidden');document.querySelector('#beachMode').classList.add('hidden');document.querySelector('#activityTab').classList.add('active');document.querySelector('#beachTab').classList.remove('active');});
