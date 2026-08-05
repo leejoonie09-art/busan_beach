@@ -8,7 +8,12 @@ url.searchParams.set('stn', '0');
 url.searchParams.set('help', '1');
 url.searchParams.set('authKey', authKey);
 
-const response = await fetch(url);
+const response = await fetch(url, {
+  headers: {
+    'User-Agent': 'Busan-Beach-School-Project/1.0',
+    'Referer': 'https://apihub.kma.go.kr/'
+  }
+});
 const source = await response.text();
 if (!response.ok) throw new Error(`KMA request failed: ${response.status}`);
 if (/ERROR|인증|AUTH/i.test(source)) throw new Error('KMA returned an authentication or service error.');
