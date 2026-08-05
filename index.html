@@ -92,6 +92,10 @@
     function renderRegions(){document.querySelector('.region-chips').innerHTML=Object.keys(regionalBeaches).map(r=>'<button class="'+(r===selectedRegion?'active':'')+'" data-region="'+r+'">'+r+'</button>').join('');document.querySelectorAll('[data-region]').forEach(btn=>btn.addEventListener('click',()=>{selectedRegion=btn.dataset.region;beaches.splice(0,beaches.length,...regionalBeaches[selectedRegion].map(b=>({...b})));selectedBeach=0;renderRegions();render();renderBeach();}));}
     renderRegions();
 
+  
+    const commonsPhotos={'경포해수욕장':'https://upload.wikimedia.org/wikipedia/commons/b/b9/Gyeongpo_Beach_1.jpg','속초해수욕장':'https://upload.wikimedia.org/wikipedia/commons/e/e9/Sokcho_Beach_20221209_003.jpg','망상해수욕장':'https://upload.wikimedia.org/wikipedia/commons/a/ad/Gwan_02.jpg','을왕리해수욕장':'https://upload.wikimedia.org/wikipedia/commons/1/12/Eulwangri_Beach%2C_near_Incheon_Airport.jpg','대부도해수욕장':'https://upload.wikimedia.org/wikipedia/commons/d/df/Daebudo_summer_2016_39.JPG','대천해수욕장':'https://upload.wikimedia.org/wikipedia/commons/c/c6/Daecheon_Beach%2C_Korea.jpg','변산해수욕장':'https://upload.wikimedia.org/wikipedia/commons/2/26/Byeonsan_Sea_Beach.jpg','협재해수욕장':'https://upload.wikimedia.org/wikipedia/commons/a/af/Dol_Hareubang_at_Hyeopjae_Beach.jpg','중문해수욕장':'https://upload.wikimedia.org/wikipedia/commons/f/f7/Beach_at_Jungmun_Tourism_Complex.jpg','송도해수욕장':'https://upload.wikimedia.org/wikipedia/commons/b/ba/Busan_-_Songdo_beach.jpg'};
+    Object.values(regionalBeaches).flat().forEach(b=>{if(commonsPhotos[b.name])b.photo=commonsPhotos[b.name];});
+
   </script>
 </body>
 </html>
