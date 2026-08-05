@@ -52,13 +52,13 @@
     function render(){
       document.querySelector('#chips').innerHTML=activities.map((a,i)=>`<button class="${i===selected?'active':''}" data-index="${i}">${a}</button>`).join('');
       const ranked=[...beaches].sort((a,b)=>b.scores[selected]-a.scores[selected]);
+      const best=ranked[0];
       const pickedIndex=chosenBeachName ? ranked.findIndex(b=>b.name===chosenBeachName) : -1;
       const picked=pickedIndex>=0 ? ranked.splice(pickedIndex,1)[0] : null;
       if(picked) ranked.unshift(picked);
-      const best=ranked[0];
-      document.querySelector('#recommendLabel').textContent=picked ? '선택한 해변' : `${activities[selected]} 추천 1위`;
+      document.querySelector('#recommendLabel').textContent=`${activities[selected]} 추천 1위`;
       document.querySelector('#recommendName').textContent=best.name;
-      document.querySelector('#recommendInfo').textContent=picked ? `${activities[selected]}을 위해 선택했어요 · 파고 ${best.wave}m · 수온 ${best.temp}°C` : `파고 ${best.wave}m · 수온 ${best.temp}°C · 수질 좋음`;
+      document.querySelector('#recommendInfo').textContent=`파고 ${best.wave}m · 수온 ${best.temp}°C · 수질 좋음`;
       document.querySelector('#list').innerHTML=ranked.map((b,i)=>{
         const isPicked=b.name===chosenBeachName;
         const originalRank=[...beaches].sort((a,c)=>c.scores[selected]-a.scores[selected]).findIndex(c=>c.name===b.name)+1;
