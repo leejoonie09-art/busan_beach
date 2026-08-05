@@ -63,7 +63,10 @@
       else if(attempt<25){setTimeout(()=>mapSdkReady(callback,attempt+1),180);}
       else{const mini=document.querySelector('#miniMap');if(mini)mini.innerHTML='<div style=\"padding:34px 8px;color:#17636b;font-weight:800;font-size:12px\">카카오 지도 연결을 확인 중이에요</div>';}
     }
+    const fixedBeachPlaces={'을왕리해수욕장':{lat:37.4483,lng:126.3720},'대부도해수욕장':{lat:37.1973,lng:126.5840},'하나개해수욕장':{lat:37.3840,lng:126.4110}};
     function beachPlaceSearch(beach,callback){
+      const fixed=fixedBeachPlaces[beach.name];
+      if(fixed){callback({name:beach.name,lat:fixed.lat,lng:fixed.lng});return;}
       mapSdkReady(()=>{
         const places=new kakao.maps.services.Places();
         const query=`${beach.area||'부산'} ${beach.name}`;
@@ -205,4 +208,5 @@
   Object.values(regionalBeaches).flat().forEach(b=>{if(b.name==='하나개해수욕장')b.photo='https://upload.wikimedia.org/wikipedia/commons/5/5e/Cabana_at_Hanagae_Beach%2C_Muuido.jpg';if(b.name==='꽃지해수욕장')b.photo='https://upload.wikimedia.org/wikipedia/commons/b/b9/Kkotji_Beach_in_Buan.jpg';});const userPhotos={'을왕리해수욕장':'1','하나개해수욕장':'2','대천해수욕장':'3','꽃지해수욕장':'4','만리포해수욕장':'5','변산해수욕장':'6','선유도해수욕장':'7','명사십리해수욕장':'8','율포해수욕장':'9','영일대해수욕장':'10'};Object.values(regionalBeaches).flat().forEach(b=>{if(userPhotos[b.name])b.photo='https://raw.githubusercontent.com/leejoonie09-art/busan_beach/main/'+userPhotos[b.name];});</script>
 </body>
 </html>
+ 
  
