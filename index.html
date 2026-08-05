@@ -212,7 +212,7 @@
 </style>
 <button id="bgCycle" type="button" aria-label="배경색 바꾸기">🎨 배경색</button>
 <script>
-(()=>{const colors=['linear-gradient(180deg,#bff3ee 0%,#77d9d2 42%,#279ea2 100%)','linear-gradient(180deg,#d8efff 0%,#90c9f4 42%,#4f91ca 100%)','linear-gradient(180deg,#f5e6ff 0%,#d6b8ec 42%,#9e7fbd 100%)','linear-gradient(180deg,#fff0dc 0%,#ffd28c 42%,#e89a6d 100%)','linear-gradient(180deg,#e3f6d5 0%,#a8d9a3 42%,#5fae91 100%)'];let index=0;const button=document.getElementById('bgCycle');button.addEventListener('click',()=>{index=(index+1)%colors.length;document.body.style.setProperty('background',colors[index],'important');document.body.style.backgroundAttachment='fixed';});})();
+(()=>{const pages=['linear-gradient(180deg,#bff3ee 0%,#77d9d2 42%,#279ea2 100%)','linear-gradient(180deg,#d8efff 0%,#90c9f4 42%,#4f91ca 100%)','linear-gradient(180deg,#f5e6ff 0%,#d6b8ec 42%,#9e7fbd 100%)','linear-gradient(180deg,#fff0dc 0%,#ffd28c 42%,#e89a6d 100%)','linear-gradient(180deg,#e3f6d5 0%,#a8d9a3 42%,#5fae91 100%)'];const heroes=['linear-gradient(135deg,#169fa4,#49cbbb)','linear-gradient(135deg,#368ed1,#82c9f3)','linear-gradient(135deg,#9472bb,#d3aee6)','linear-gradient(135deg,#e18567,#ffc36e)','linear-gradient(135deg,#4c9f88,#a9d58e)'];let index=0;const button=document.getElementById('bgCycle');const hero=document.querySelector('.hero');button.addEventListener('click',()=>{index=(index+1)%pages.length;document.body.style.setProperty('background',pages[index],'important');document.body.style.backgroundAttachment='fixed';hero.style.setProperty('background',heroes[index],'important');});})();
 </script></body>
 </html>
  
